@@ -1,0 +1,43 @@
+spring:
+    shardingsphere:
+        datasource:
+            ds0:
+                driver-class-name: com.mysql.jdbc.Driver
+                password: 123456
+                type: com.alibaba.druid.pool.DruidDataSource
+                url: jdbc:mysql://127.0.0.1:3306/ds0?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+                username: root
+            ds1:
+                driver-class-name: com.mysql.jdbc.Driver
+                password: 123456
+                type: com.alibaba.druid.pool.DruidDataSource
+                url: jdbc:mysql://127.0.0.1:3306/ds1?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+                username: root
+            names: ds0,ds1
+        sharding:
+            # 默认按省份分库  按省份分表
+            default-database-strategy:
+                inline:
+                    algorithm-expression: ds$->{province % 2}
+                    sharding-column: province
+            tables:
+                user:
+                    actual-data-nodes: ds$->{0..1}.user$->{0..1}
+                    table-strategy:
+                        inline:
+                            algorithm-expression: user$->{id % 2}
+                            sharding-column: id
+
+                  # 配置 住建生成策略
+                  #  key-generator:
+                  #      column: id
+                  #      props:
+                  #          worker:
+                  #              id: 33
+                  #      type: SNOWFLAKE
+                ac#tive_user:
+                    table-strategy:
+                        standard:
+                            shardingColumn: last_login_time
+                            preciseAlgorithmClassName: com.uu.config.db.DBStandardShardAlgo
+                        actual-data-nodes: ds$->{0..1}.active_user$->{0..3}

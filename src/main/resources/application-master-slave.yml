@@ -1,0 +1,21 @@
+spring:
+    shardingsphere:
+        datasource:
+            dsmaster:
+                driver-class-name: com.mysql.jdbc.Driver
+                password: 123456
+                type: com.alibaba.druid.pool.DruidDataSource
+                url: jdbc:mysql://127.0.0.1:3306/dsmaster?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+                username: root
+            dsslave:
+                driver-class-name: com.mysql.jdbc.Driver
+                password: 123456
+                type: com.alibaba.druid.pool.DruidDataSource
+                url: jdbc:mysql://127.0.0.1:3306/dsslave0?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+                username: root
+            names: dsmaster,dsslave
+        masterslave:
+            load-balance-algorithm-type: random
+            master-data-source-name: dsmaster
+            name: user
+            slave-data-source-names: dsslave

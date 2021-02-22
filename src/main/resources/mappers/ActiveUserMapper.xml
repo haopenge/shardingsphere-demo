@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uu.dao.ActiveUserDao">
+
+    <insert id="insert">
+        INSERT INTO active_user ( user_id,province,last_login_time)VALUES( #{userId},#{province},#{lastLoginTime})
+    </insert>
+
+    <select id="find"  resultType="com.uu.entity.ActiveUserDo">
+        SELECT id, user_id,province,last_login_time FROM active_user order by id desc limit #{limit}
+    </select>
+</mapper>
